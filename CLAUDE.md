@@ -171,7 +171,28 @@ npx playwright test                # E2E against the running stack
 
 ---
 
-## 8. Working style
+## 8. Model routing
+
+`.claude/settings.json` sets the model to **`opusplan`**: Opus while in plan
+mode, Sonnet for execution. Design decisions are expensive to reverse once code
+is written; typing out an already-decided design is not.
+
+The switch happens at the **plan mode boundary**, not on topic. Asking an
+architecture question outside plan mode is answered by Sonnet. Enter plan mode
+(`Shift+Tab`) before any conversation that decides something.
+
+Two subagents pin `model: opus` regardless of phase:
+
+| Agent | Why it is pinned |
+| --- | --- |
+| `architecture-guardian` | Its verdicts are hard to verify. A missed dependency-rule violation enters the codebase stamped as reviewed, and the next one cites it as precedent. |
+| `sql-performance-analyst` | Owns `REQ-3`, where a plausible-looking query that silently aggregates in memory satisfies every test while failing the requirement. |
+
+The other four inherit. Test design, UI review, documentation and language
+coaching all produce output that is cheap to check by reading it, so the cost of
+a weaker answer is a re-read rather than a defect.
+
+## 9. Working style
 
 - Prefer the boring solution. Every added abstraction has to earn its place,
   and "it might be useful later" is not a justification.
