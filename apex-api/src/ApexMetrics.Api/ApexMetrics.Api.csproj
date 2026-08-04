@@ -1,0 +1,16 @@
+<Project Sdk="Microsoft.NET.Sdk.Web">
+
+  <PropertyGroup>
+    <TargetFramework>net10.0</TargetFramework>
+    <ImplicitUsings>enable</ImplicitUsings>
+    <Nullable>enable</Nullable>
+    <!-- Matches the Definition of Done in CLAUDE.md: a warning is a build
+         failure here, not something that accumulates until someone reads
+         the log. -->
+    <TreatWarningsAsErrors>true</TreatWarningsAsErrors>
+    <!-- No culture-specific formatting in this API; skipping ICU keeps the
+         published image smaller. Revisit if that assumption stops holding. -->
+    <InvariantGlobalization>true</InvariantGlobalization>
+  </PropertyGroup>
+
+</Project>

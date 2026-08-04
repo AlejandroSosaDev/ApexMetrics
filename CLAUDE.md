@@ -163,9 +163,9 @@ A task is done when all of these hold:
 docker compose up --build          # full stack; API waits for a healthy DB
 dotnet test                        # all backend tests
 dotnet format --verify-no-changes  # style gate, same rules as CI
-pnpm --filter apex-ui dev          # frontend dev server
-pnpm --filter apex-ui test         # component tests
-pnpm --filter apex-ui build        # production build
+(cd apex-ui && pnpm dev)            # frontend dev server
+(cd apex-ui && pnpm test)           # component tests
+(cd apex-ui && pnpm build)          # production build
 npx playwright test                # E2E against the running stack
 ```
 
