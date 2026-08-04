@@ -1,0 +1,73 @@
+# Normalize all text files to LF in the repository.
+# Without this, files authored on Windows are committed with CRLF and break
+# when they are executed inside the Linux containers defined in docker-compose.yml.
+* text=auto eol=lf
+
+# ---------------------------------------------------------------------------
+# Files that MUST be LF: they are consumed by Linux tooling inside containers.
+# A CRLF here produces errors that are notoriously hard to diagnose, e.g.
+# "/bin/sh^M: bad interpreter" or a MySQL entrypoint silently skipping seeds.
+# ---------------------------------------------------------------------------
+*.sh                text eol=lf
+*.bash              text eol=lf
+Dockerfile          text eol=lf
+*.Dockerfile        text eol=lf
+.dockerignore       text eol=lf
+docker-compose*.yml text eol=lf
+*.sql               text eol=lf
+
+# ---------------------------------------------------------------------------
+# Windows-only scripts keep CRLF.
+# ---------------------------------------------------------------------------
+*.bat               text eol=crlf
+*.cmd               text eol=crlf
+*.ps1               text eol=crlf
+
+# ---------------------------------------------------------------------------
+# Source and configuration.
+# ---------------------------------------------------------------------------
+*.cs                text diff=csharp
+*.csproj            text
+*.sln               text eol=crlf
+*.props             text
+*.targets           text
+*.ts                text
+*.tsx               text
+*.js                text
+*.jsx               text
+*.json              text
+*.jsonc             text
+*.css               text
+*.html              text
+*.md                text diff=markdown
+*.yml               text
+*.yaml              text
+*.editorconfig      text
+
+# ---------------------------------------------------------------------------
+# Binary assets: never normalize, never diff.
+# ---------------------------------------------------------------------------
+*.png               binary
+*.jpg               binary
+*.jpeg              binary
+*.gif               binary
+*.webp              binary
+*.ico               binary
+*.woff              binary
+*.woff2             binary
+*.ttf               binary
+*.otf               binary
+*.pdf               binary
+*.zip               binary
+*.gz                binary
+*.dll               binary
+*.pdb               binary
+*.snk               binary
+
+# ---------------------------------------------------------------------------
+# Lockfiles: collapse in diffs and mark generated so they do not distort
+# language statistics or pull request review noise.
+# ---------------------------------------------------------------------------
+pnpm-lock.yaml      linguist-generated=true -diff
+package-lock.json   linguist-generated=true -diff
+packages.lock.json  linguist-generated=true -diff
