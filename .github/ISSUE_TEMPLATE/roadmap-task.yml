@@ -1,0 +1,72 @@
+name: Roadmap task
+description: A task from the ApexMetrics roadmap
+title: "APEX-XX: "
+labels: ["task"]
+body:
+  - type: input
+    id: requirement
+    attributes:
+      label: Requirement
+      description: The specification clause this satisfies, from docs/requirements.md
+      placeholder: REQ-3.1 — Resource Allocation Index
+    validations:
+      required: true
+
+  - type: dropdown
+    id: area
+    attributes:
+      label: Area
+      options:
+        - Backend — Domain
+        - Backend — Application
+        - Backend — Infrastructure
+        - Backend — API
+        - Frontend
+        - Database
+        - Infrastructure / Docker
+        - CI/CD
+        - Documentation
+    validations:
+      required: true
+
+  - type: textarea
+    id: outcome
+    attributes:
+      label: Outcome
+      description: What is true once this is done, stated as an observable behaviour rather than a list of files to write.
+      placeholder: An admin requesting /api/v1/analytics/overview receives resource allocation for every developer, including those with no active tasks.
+    validations:
+      required: true
+
+  - type: textarea
+    id: acceptance
+    attributes:
+      label: Acceptance criteria
+      description: Conditions that can be checked, not opinions.
+      value: |
+        - [ ]
+        - [ ]
+        - [ ]
+    validations:
+      required: true
+
+  - type: textarea
+    id: edge-cases
+    attributes:
+      label: Edge cases to cover
+      description: The cases that get forgotten. Boundaries, empty sets, division by zero, invalid transitions, concurrency, unauthorised access.
+      placeholder: |
+        - Developer with zero assigned tasks must still appear
+        - Project with zero estimated hours must not divide by zero
+
+  - type: textarea
+    id: notes
+    attributes:
+      label: Design notes
+      description: Constraints, prior decisions, or a relevant ADR.
+
+  - type: input
+    id: branch
+    attributes:
+      label: Branch
+      placeholder: feat/APEX-XX-short-slug

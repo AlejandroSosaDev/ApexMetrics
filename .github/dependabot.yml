@@ -1,0 +1,124 @@
+# Dependabot keeps dependencies current without turning the repository into a
+# stream of single-package pull requests.
+#
+# Updates are grouped so one PR carries a coherent set of changes: a reviewer
+# can evaluate "all non-breaking backend patches this week" far more usefully
+# than fourteen separate bumps, and it keeps the CI queue short.
+version: 2
+
+updates:
+  # --- Backend -------------------------------------------------------------
+  - package-ecosystem: nuget
+    directory: /apex-api
+    schedule:
+      interval: weekly
+      day: monday
+      time: "06:00"
+    open-pull-requests-limit: 5
+    commit-message:
+      prefix: chore
+      include: scope
+    groups:
+      # Microsoft ships the runtime, EF Core and ASP.NET packages in lockstep.
+      # Splitting them across PRs produces combinations that were never tested
+      # together upstream.
+      dotnet-runtime:
+        patterns:
+          - "Microsoft.Extensions.*"
+          - "Microsoft.AspNetCore.*"
+          - "Microsoft.EntityFrameworkCore*"
+          - "System.*"
+        update-types:
+          - minor
+          - patch
+      test-tooling:
+        patterns:
+          - "xunit*"
+          - "Shouldly"
+          - "NSubstitute*"
+          - "Testcontainers*"
+          - "coverlet*"
+          - "NetArchTest*"
+      backend-minor-and-patch:
+        patterns:
+          - "*"
+        update-types:
+          - minor
+          - patch
+
+  # --- Frontend ------------------------------------------------------------
+  - package-ecosystem: npm
+    directory: /apex-ui
+    schedule:
+      interval: weekly
+      day: monday
+      time: "06:00"
+    open-pull-requests-limit: 5
+    versioning-strategy: increase-if-necessary
+    commit-message:
+      prefix: chore
+      include: scope
+    groups:
+      react:
+        patterns:
+          - "react"
+          - "react-dom"
+          - "@types/react"
+          - "@types/react-dom"
+      tanstack:
+        patterns:
+          - "@tanstack/*"
+      build-tooling:
+        patterns:
+          - "vite"
+          - "@vitejs/*"
+          - "typescript"
+          - "tailwindcss"
+          - "@tailwindcss/*"
+      test-tooling:
+        patterns:
+          - "vitest"
+          - "@vitest/*"
+          - "@testing-library/*"
+          - "msw"
+          - "@playwright/*"
+          - "playwright"
+      frontend-minor-and-patch:
+        patterns:
+          - "*"
+        update-types:
+          - minor
+          - patch
+
+  # --- Container images ----------------------------------------------------
+  - package-ecosystem: docker
+    directories:
+      - /apex-api
+      - /apex-ui
+    schedule:
+      interval: weekly
+      day: monday
+    commit-message:
+      prefix: chore
+      include: scope
+    # Base image majors change the runtime underneath the application and are
+    # reviewed deliberately, not delivered by a bot.
+    ignore:
+      - dependency-name: "*"
+        update-types:
+          - version-update:semver-major
+
+  # --- GitHub Actions ------------------------------------------------------
+  # Actions are a supply-chain surface: a compromised action runs with access
+  # to the workflow's secrets. Keeping them current is a security control.
+  - package-ecosystem: github-actions
+    directory: /
+    schedule:
+      interval: weekly
+      day: monday
+    commit-message:
+      prefix: ci
+    groups:
+      actions:
+        patterns:
+          - "*"

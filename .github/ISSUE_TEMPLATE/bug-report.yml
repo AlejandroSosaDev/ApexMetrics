@@ -1,0 +1,71 @@
+name: Bug report
+description: Something behaves differently from what the specification or an ADR says
+title: "bug: "
+labels: ["bug"]
+body:
+  - type: markdown
+    attributes:
+      value: |
+        Every bug fix starts with a failing test that reproduces it. The more
+        precisely this is described, the faster that test can be written.
+
+  - type: textarea
+    id: expected
+    attributes:
+      label: Expected behaviour
+      description: What should happen, and what says so — a requirement, an ADR, or a test.
+    validations:
+      required: true
+
+  - type: textarea
+    id: actual
+    attributes:
+      label: Actual behaviour
+      description: What happens instead. Include the error message or response body verbatim.
+    validations:
+      required: true
+
+  - type: textarea
+    id: reproduce
+    attributes:
+      label: Steps to reproduce
+      value: |
+        1.
+        2.
+        3.
+    validations:
+      required: true
+
+  - type: dropdown
+    id: area
+    attributes:
+      label: Area
+      options:
+        - Backend — Domain
+        - Backend — Application
+        - Backend — Infrastructure
+        - Backend — API
+        - Frontend
+        - Database
+        - Infrastructure / Docker
+        - CI/CD
+    validations:
+      required: true
+
+  - type: dropdown
+    id: severity
+    attributes:
+      label: Severity
+      options:
+        - Blocking — data loss, security, or the stack does not start
+        - High — a requirement is not satisfied
+        - Medium — wrong behaviour with a workaround
+        - Low — cosmetic
+    validations:
+      required: true
+
+  - type: textarea
+    id: environment
+    attributes:
+      label: Environment
+      placeholder: Local docker compose / deployed demo · browser · commit SHA
