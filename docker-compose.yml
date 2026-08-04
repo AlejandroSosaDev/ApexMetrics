@@ -1,0 +1,42 @@
+name: apexmetrics
+
+services:
+  apex-db:
+    image: mysql:8.4
+    container_name: apex-db
+    restart: unless-stopped
+    environment:
+      MYSQL_ROOT_PASSWORD: ${MYSQL_ROOT_PASSWORD}
+      MYSQL_DATABASE: ${MYSQL_DATABASE}
+      MYSQL_USER: ${MYSQL_USER}
+      MYSQL_PASSWORD: ${MYSQL_PASSWORD}
+    ports:
+      # Host-side only, for connecting a local SQL client during development.
+      # 3308 avoids colliding with a MySQL instance already using 3306 on the
+      # host; apex-api always reaches this service over the internal network
+      # on its native port 3306.
+      - "${DB_HOST_PORT:-3308}:3306"
+    volumes:
+      - apex-db-data:/var/lib/mysql
+      # Scripts here run once, in alphabetical order, only when the data
+      # directory is empty (REQ-4.4). schema.sql before seed.sql is
+      # enforced by the numeric prefix, not by listing order below.
+      - ./db:/docker-entrypoint-initdb.d:ro
+    healthcheck:
+      # -u root -p"$$MYSQL_ROOT_PASSWORD": the double $$ escapes Compose's own
+      # variable interpolation so the literal string reaches the container
+      # shell, which then expands $MYSQL_ROOT_PASSWORD from its own env.
+      test: ["CMD", "mysqladmin", "ping", "-h", "localhost", "-u", "root", "-p$$MYSQL_ROOT_PASSWORD"]
+      interval: 5s
+      timeout: 5s
+      retries: 10
+      start_period: 30s
+    networks:
+      - apex-network
+
+networks:
+  apex-network:
+    driver: bridge
+
+volumes:
+  apex-db-data:
