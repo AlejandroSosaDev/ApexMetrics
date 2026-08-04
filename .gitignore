@@ -1,0 +1,124 @@
+# =============================================================================
+# Secrets — keep at the top so it is never scrolled past during review.
+# Only *.example files are tracked; every real value stays local.
+# =============================================================================
+.env
+.env.*
+!.env.example
+!.env.*.example
+*.pem
+*.key
+*.pfx
+*.p12
+appsettings.Local.json
+appsettings.*.Local.json
+secrets.json
+
+# =============================================================================
+# .NET
+# =============================================================================
+bin/
+obj/
+out/
+[Dd]ebug/
+[Rr]elease/
+x64/
+x86/
+[Aa][Rr][Mm]64/
+*.user
+*.suo
+*.userosscache
+*.sln.docstates
+*.userprefs
+.vs/
+artifacts/
+project.lock.json
+project.fragment.lock.json
+*.nupkg
+*.snupkg
+.packages/
+
+# Test output and coverage
+[Tt]est[Rr]esult*/
+coverage/
+coverage*.json
+coverage*.xml
+coverage*.info
+*.coverage
+*.coveragexml
+TestResults/
+BenchmarkDotNet.Artifacts/
+
+# =============================================================================
+# Node / frontend
+# =============================================================================
+node_modules/
+dist/
+dist-ssr/
+build/
+.vite/
+*.local
+.eslintcache
+.stylelintcache
+*.tsbuildinfo
+.pnpm-store/
+.pnpm-debug.log*
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+
+# Playwright
+/playwright-report/
+/playwright/.cache/
+/test-results/
+/blob-report/
+
+# =============================================================================
+# Docker — local overrides stay out of version control.
+# =============================================================================
+docker-compose.override.yml
+.docker/data/
+
+# =============================================================================
+# IDEs and editors
+# =============================================================================
+.idea/
+*.swp
+*.swo
+*~
+.fleet/
+
+# VS Code: share the team-relevant configuration, ignore personal state.
+.vscode/*
+!.vscode/settings.json
+!.vscode/extensions.json
+!.vscode/launch.json
+!.vscode/tasks.json
+
+# =============================================================================
+# Operating system
+# =============================================================================
+.DS_Store
+.DS_Store?
+._*
+.Spotlight-V100
+.Trashes
+Thumbs.db
+ehthumbs.db
+Desktop.ini
+$RECYCLE.BIN/
+
+# =============================================================================
+# Logs and temporary files
+# =============================================================================
+logs/
+*.log
+tmp/
+temp/
+.cache/
+
+# =============================================================================
+# Claude Code — share the project configuration that makes the workflow
+# reproducible, ignore machine-local state and personal overrides.
+# =============================================================================
+.claude/settings.local.json
