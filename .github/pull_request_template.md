@@ -24,7 +24,7 @@
 
 - [ ] `dotnet build -warnaserror`
 - [ ] `dotnet test`
-- [ ] `pnpm --filter apex-ui test && pnpm --filter apex-ui build`
+- [ ] `(cd apex-ui && pnpm test && pnpm build)`
 - [ ] `docker compose up --build` <!-- if infrastructure changed -->
 
 ## Definition of done

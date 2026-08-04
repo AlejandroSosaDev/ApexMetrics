@@ -65,7 +65,7 @@ itself here.
 dotnet build -warnaserror
 dotnet test
 dotnet format --verify-no-changes
-pnpm --filter apex-ui test && pnpm --filter apex-ui build
+(cd apex-ui && pnpm test && pnpm build)
 ```
 
 Run them. A pull request that says "tests pass" without having run them costs
