@@ -34,6 +34,51 @@ services:
     networks:
       - apex-network
 
+  apex-api:
+    build:
+      context: ./apex-api
+    container_name: apex-api
+    restart: unless-stopped
+    environment:
+      ASPNETCORE_ENVIRONMENT: Development
+      # ASP.NET Core's double-underscore convention maps this to the nested
+      # config key ConnectionStrings:Default. Unused by Program.cs until
+      # Phase 2 wires up EF Core (ADR-0001) — declared now so this file does
+      # not need a second edit once that code lands.
+      ConnectionStrings__Default: "Server=apex-db;Port=3306;Database=${MYSQL_DATABASE};User=${MYSQL_USER};Password=${MYSQL_PASSWORD};"
+    ports:
+      - "${API_HOST_PORT:-8080}:8080"
+    depends_on:
+      # REQ-4.3: the backend waits for the database to be healthy, not just
+      # started — mysqld accepts TCP connections before it has finished
+      # applying db/schema.sql and db/seed.sql, so "started" would let the
+      # API race the seed and see an empty schema.
+      apex-db:
+        condition: service_healthy
+    networks:
+      - apex-network
+
+  apex-ui:
+    build:
+      context: ./apex-ui
+      args:
+        # Vite inlines this into the bundle at build time, so it must be the
+        # address the user's BROWSER can reach, not the internal Docker
+        # network name — "apex-api" resolves only inside this compose
+        # network, not on the host serving the browser.
+        VITE_API_BASE_URL: http://localhost:${API_HOST_PORT:-8080}
+    container_name: apex-ui
+    restart: unless-stopped
+    ports:
+      - "${UI_HOST_PORT:-5173}:8080"
+    # No depends_on: apex-ui is a static SPA that calls the API from the
+    # browser, not at container start, so it has nothing to wait for. It is
+    # deliberately able to start (and show a "connecting..." state) before
+    # apex-api is ready, matching the free-tier cold-start UX this project
+    # is designed around.
+    networks:
+      - apex-network
+
 networks:
   apex-network:
     driver: bridge
