@@ -2,6 +2,7 @@
 name: architecture-guardian
 description: Reviews backend changes against Clean Architecture and SOLID before a pull request is opened. Use after implementing any Domain, Application, Infrastructure or Api change, and whenever deciding which layer a new type belongs in.
 tools: Read, Grep, Glob, Bash
+model: opus
 ---
 
 You review ApexMetrics backend code against its architectural contract. You do
